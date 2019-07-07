@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8" />
+<script type="text/javascript" src="webjars/jquery/3.4.1/jquery.min.js"></script>
+<script type="text/javascript" th:src="@{js/main.js}" src="../js/main.js"></script>
+<script type="text/javascript" src="webjars/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="webjars/bootstrap/4.3.1/css/bootstrap.min.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+<body>
+  
+ <div class="container">
+ <button class="btn btn-success nBtn" style="font-size: 24px;" data-toggle="tooltip" data-placement="bottom" title="Nova aktivnost"><i class="fa fa-file-o"></i></button>
+ 		<div  class="card">
+ 		
+ 			<div class="card-block">
+ 					
+ 					<table class="table table-hover">
+ 						<thead>
+ 							<tr>
+ 								<th>ID</th>
+ 								<th>Naziv</th>
+ 								<th>Kategorija</th>
+ 								<th>Podkategorija</th>
+ 							</tr>
+ 						</thead>
+ 						<tbody>
+ 							<tr th:each="activity : ${data.content}">
+ 								<td th:text="${activity.id}"></td>
+ 								<td th:text="${activity.naziv}"></td>
+ 								<td th:text="${activity.kategorija}"></td>
+ 								<td th:text="${activity.podkategorija}"></td>
+ 								<td>
+ 									<a th:href="@{findOne/(id=${activity.id})}" class="btn btn-primary eBtn" data-toggle="tooltip" data-placement="left" title="Uredi"><i class="fa fa-edit"></i></a>
+ 									<a th:href="@{delete/(id=${activity.id})}" class="btn btn-danger dBtn" data-toggle="tooltip" data-placement="left" title="Obriši"><i class="fa fa-trash"></i></a>
+ 								</td>
+ 							</tr>
+ 						</tbody>
+ 					</table>
+ 					
+ 					<hr/>
+ 					<ul class="nav nav-pills">
+ 						<li class="nav-item" th:each="i:${#numbers.sequence(1, data.totalPages)}">
+ 							<a th:href="@{/(page=${i}-1)}" th:text="${i}" class="nav-link" th:classappend="${currentPage}==${i}-1?'active':''"></a>
+ 						</li>
+ 					</ul>
+ 			</div>
+ 		</div>
+	<div class="myForm">
+		<form id="myForm" th:action="@{/save}" method="post">
+				<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+			  		<div class="modal-dialog" role="document">
+			    		<div class="modal-content">
+				      			<div class="modal-header">
+				        			<h5 class="modal-title" id="exampleModalLabel">Update or Create</h5>
+				        			<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+				          				<span aria-hidden="true">&times;</span>
+				        			</button>
+				      			</div>
+				      		<div class="modal-body">
+					        	
+					          		<div class="form-group">
+					            		<label for="id" class="col-form-label">ID:</label>
+					            		<input type="text" class="form-control" id="id" name="id" value="" disabled="disabled" />
+					          		</div>
+					          		<div class="form-group">
+					            		<label for="naziv" class="col-form-label">Naziv:</label>
+					            		<input type="text" class="form-control" id="naziv" name="naziv" value="" />
+					          		</div>
+					          		<div class="form-group">
+					            		<label for="kategorija" class="col-form-label">Kategorija:</label>
+					            		<input type="text" class="form-control" id="kategorija" name="kategorija" value="" />
+					          		</div>
+					          		<div class="form-group">
+					            		<label for="podkategorija" class="col-form-label">Podkategorija:</label>
+					            		<input type="text" class="form-control" id="podkategorija" name="podkategorija" value="" />
+					          		</div>
+					        	
+				      		</div>
+				      		<div class="modal-footer">
+						        <a href="" class="btn btn-secondary" role="button" data-dismiss="modal" id="cBtn">Close</a>
+						       <!--   <button type="submit" class="btn btn-primary" id="btnSave" value="save">Save</button> -->
+						       	<a href="" class="btn btn-primary" role="button" id="sBtn">Save</a>
+				      		</div>
+			    		</div>
+			  		</div>
+				</div>
+		</form>
+	</div>
+	
+	<div class="modal fade" id="confirmationModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p class="alert alert-danger">
+        Sigurno želiš obrisati ovu aktivnost?
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <a href="" class="btn btn-danger" id="delRef">Delete</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+ 	<div class="modal fade" id="infoModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title"></h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p></p>
+      </div>
+      <div class="modal-footer">
+        <a href="" class="btn btn-primary" role="button" id="okBtn">OK</a>
+      </div>
+    </div>
+  </div>
+</div>
+	
+</div>
+</body>
+</html>
